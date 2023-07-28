@@ -1,0 +1,146 @@
+---
+title: "Ingest S3 Performance"
+author: "Ajay Krishnamurthy"
+output:
+  pdf_document: default
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(fig.width=8, fig.height=8) 
+```
+
+```{r, echo=FALSE, warning =FALSE, message = FALSE}
+library(tidyverse)
+library(grid)
+library(ggh4x)
+```
+
+```{r, echo=FALSE, warning = FALSE, message = FALSE}
+data <- read_csv("results.csv")
+data <- data |>
+  mutate(MiB = paste0(MiB, "MiB"), fpt = paste0(fpt, " file(s) per task"), numfiles = paste0(numfiles, " file(s)"))
+```
+
+```{r, echo=FALSE, warning = FALSE, message = FALSE}
+grouped_data <- data |>
+  group_by(MiB, numfiles, delay, N, fpt) |>
+  summarize(
+    median_runtime = median(seconds)
+  )
+```
+
+```{r, echo=FALSE, warning =FALSE, message = FALSE}
+one_mib <- grouped_data |>
+  filter(MiB=="1MiB")
+
+five_mib <- grouped_data |>
+  filter(MiB=="5MiB")
+
+ten_mib <- grouped_data |>
+  filter(MiB=="10MiB")
+
+hundred_mib <- grouped_data |>
+  filter(MiB=="100MiB")
+
+fivehundred_mib <- grouped_data |>
+  filter(MiB=="500MiB")
+```
+
+```{r, echo=FALSE, warning =FALSE, message = FALSE}
+pl <- one_mib %>%
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  geom_line() +
+  geom_point(shape=1) +
+  theme_light() +
+  theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
+  scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
+  labs(x = "Network RTT (milliseconds)", 
+       y = "Execution Time (seconds)") +
+  scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
+
+strips <- strip_themed(
+  background_x = elem_list_rect(fill = c("slategray1", "rosybrown1", "lightgreen")),
+     by_layer_x = TRUE,
+)
+pl + facet_wrap2(~ MiB +  numfiles+ fpt, strip=strips)
+```
+
+
+```{r, echo=FALSE, warning =FALSE, message = FALSE}
+pl <- five_mib %>%
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  geom_line() +
+  geom_point(shape=1) +
+  theme_light() +
+  theme(strip.background = element_rect(color="black"),strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
+  scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
+  labs(x = "Network RTT (milliseconds)", 
+       y = "Execution Time (seconds)") +
+  scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
+
+strips <- strip_themed(
+  background_x = elem_list_rect(fill = c("slategray1", "rosybrown1", "lightgreen")),
+     by_layer_x = TRUE,
+)
+pl + facet_wrap2(~ MiB +  numfiles+ fpt, strip=strips)
+```
+
+
+```{r, echo=FALSE, warning =FALSE, message = FALSE}
+pl <- ten_mib %>%
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  geom_line() +
+  geom_point(shape=1) +
+  theme_light() +
+  theme(strip.background = element_rect(color="black"),strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
+  scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
+  labs(x = "Network RTT (milliseconds)", 
+       y = "Execution Time (seconds)") +
+  scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
+
+strips <- strip_themed(
+  background_x = elem_list_rect(fill = c("slategray1", "rosybrown1", "lightgreen")),
+     by_layer_x = TRUE,
+)
+pl + facet_wrap2(~ MiB +  numfiles+ fpt, strip=strips)
+```
+
+```{r, echo=FALSE, warning =FALSE, message = FALSE}
+pl <- hundred_mib %>%
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  geom_line() +
+  geom_point(shape=1) +
+  theme_light() +
+  theme(strip.background = element_rect(color="black"),strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
+  scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
+  labs(x = "Network RTT (milliseconds)", 
+       y = "Execution Time (seconds)") +
+  scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
+
+strips <- strip_themed(
+  background_x = elem_list_rect(fill = c("slategray1", "rosybrown1", "lightgreen")),
+     by_layer_x = TRUE,
+)
+pl + facet_wrap2(~ MiB +  numfiles+ fpt, strip=strips)
+```
+
+
+```{r, echo=FALSE, warning =FALSE, message = FALSE}
+pl <- fivehundred_mib %>%
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  geom_line() +
+  geom_point(shape=1) +
+  theme_light() +
+  theme(strip.background = element_rect(color="black"),strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
+  scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
+  labs(x = "Network RTT (milliseconds)", 
+       y = "Execution Time (seconds)") +
+  scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
+
+strips <- strip_themed(
+  background_x = elem_list_rect(fill = c("slategray1", "rosybrown1", "lightgreen")),
+     by_layer_x = TRUE,
+)
+pl + facet_wrap2(~ MiB +  numfiles+ fpt, strip=strips)
+```
+
