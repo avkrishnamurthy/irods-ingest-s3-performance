@@ -65,10 +65,10 @@ def clear_bucket():
 
 def main():
     filesize_array    = ['1', '5', '10', '100', '500'] #['1000', '5000']
-    num_files         = [1, 15]
+    num_files         = [1, 15] #[1] only 1 file for 1000, 5000 MiB
     delay_array       = ['0', '50', '100']
     num_threads_array =  ['1', '2', '3', '4', '8']
-    files_per_task_array = ['1', '3']
+    files_per_task_array = ['1', '3'] #['1'], no need to run 3 fpt with only 1 file for 1000, 5000 MiB
     runs_of_each      = 5
 
 
@@ -112,13 +112,6 @@ def main():
                             run_cmd(['irm', '-r', name])
                             run_cmd(['rm', '-rf', trash_path])
 
-
-
-    run_cmd(['sudo', 'tc', 'qdisc', 'del', 'dev', 'eth0', 'root', 'netem'], check_rc=True)
-
-
-
 if __name__ == '__main__':
-    #main()
     sys.exit(main())
                           
