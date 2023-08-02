@@ -76,7 +76,7 @@ def main():
     results_file = "results.csv"
     # csv headers
     with open(os.path.join(script_path, results_file), 'a') as f:
-        f.write('MiB,numfiles,delay,N,fpt,run,seconds\n')
+        f.write('MiB,numfiles,delay,threads,fpt,run,seconds\n')
 
     for filesize in filesize_array:
         for num in num_files:

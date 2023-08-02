@@ -29,7 +29,7 @@ data <- data |>
 
 ```{r, echo=FALSE, warning = FALSE, message = FALSE}
 grouped_data <- data |>
-  group_by(MiB, numfiles, delay, N, fpt) |>
+  group_by(MiB, numfiles, delay, threads, fpt) |>
   summarize(
     median_runtime = median(seconds)
   )
@@ -61,14 +61,14 @@ five_gib <- grouped_data |>
 
 ```{r, echo=FALSE, warning =FALSE, message = FALSE}
 pl <- one_mib %>%
-  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(threads))) +
   geom_line() +
   geom_point(shape=1) +
   theme_light() +
   theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
   scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
   labs(x = "Network RTT (milliseconds)", 
-       y = "Execution Time (seconds)") +
+       y = "Median Execution Time (seconds)") +
   scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
 
 strips <- strip_themed(
@@ -77,19 +77,21 @@ strips <- strip_themed(
 )
 pl <- pl + facet_wrap2(~ MiB +  numfiles, strip=strips)
 ggsave(file="one_mib.png", plot=pl, width=8, height=6)
+
+pl
 ```
 
 
 ```{r, echo=FALSE, warning =FALSE, message = FALSE}
 pl <- five_mib %>%
-  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(threads))) +
   geom_line() +
   geom_point(shape=1) +
   theme_light() +
   theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
   scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
   labs(x = "Network RTT (milliseconds)", 
-       y = "Execution Time (seconds)") +
+       y = "Median Execution Time (seconds)") +
   scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
 
 strips <- strip_themed(
@@ -98,19 +100,21 @@ strips <- strip_themed(
 )
 pl <- pl + facet_wrap2(~ MiB +  numfiles, strip=strips)
 ggsave(file="five_mib.png", plot=pl, width=8, height=6)
+
+pl
 ```
 
 
 ```{r, echo=FALSE, warning =FALSE, message = FALSE}
 pl <- ten_mib %>%
-  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(threads))) +
   geom_line() +
   geom_point(shape=1) +
   theme_light() +
   theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
   scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
   labs(x = "Network RTT (milliseconds)", 
-       y = "Execution Time (seconds)") +
+       y = "Median Execution Time (seconds)") +
   scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
 
 strips <- strip_themed(
@@ -120,18 +124,20 @@ strips <- strip_themed(
 pl <- pl + facet_wrap2(~ MiB +  numfiles, strip=strips)
 ggsave(file="ten_mib.png", plot=pl, width=8, height=6)
 
+pl
+
 ```
 
 ```{r, echo=FALSE, warning =FALSE, message = FALSE}
 pl <- hundred_mib %>%
-  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(threads))) +
   geom_line() +
   geom_point(shape=1) +
   theme_light() +
   theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
   scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
   labs(x = "Network RTT (milliseconds)", 
-       y = "Execution Time (seconds)") +
+       y = "Median Execution Time (seconds)") +
   scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
 
 strips <- strip_themed(
@@ -140,19 +146,21 @@ strips <- strip_themed(
 )
 pl <- pl + facet_wrap2(~ MiB +  numfiles, strip=strips)
 ggsave(file="hundred_mib.png", plot=pl, width=8, height=6)
+
+pl
 ```
 
 
 ```{r, echo=FALSE, warning =FALSE, message = FALSE}
 pl <- fivehundred_mib %>%
-  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(threads))) +
   geom_line() +
   geom_point(shape=1) +
   theme_light() +
   theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
   scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
   labs(x = "Network RTT (milliseconds)", 
-       y = "Execution Time (seconds)") +
+       y = "Median Execution Time (seconds)") +
   scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
 
 strips <- strip_themed(
@@ -161,18 +169,20 @@ strips <- strip_themed(
 )
 pl <- pl + facet_wrap2(~ MiB +  numfiles, strip=strips)
 ggsave(file="fivehundred_mib.png", plot=pl, width=8, height=6)
+
+pl
 ```
 
-```{r}
+```{r, echo=FALSE, warning = FALSE, message = FALSE}
 pl <- one_gib %>%
-  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(threads))) +
   geom_line() +
   geom_point(shape=1) +
   theme_light() +
   theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
   scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
   labs(x = "Network RTT (milliseconds)", 
-       y = "Execution Time (seconds)") +
+       y = "Median Execution Time (seconds)") +
   scale_y_continuous(limits = c(0, 35), breaks = seq(0, 35, 10))
 
 strips <- strip_themed(
@@ -182,18 +192,20 @@ strips <- strip_themed(
 pl <- pl + facet_wrap2(~ MiB +  numfiles, strip=strips)
 ggsave(file="one_gib.png", plot=pl, width=8, height=6)
 
+pl
+
 ```
 
-```{r}
+```{r, echo=FALSE, warning = FALSE, message = FALSE}
 pl <- five_gib %>%
-  ggplot(aes(x = delay, y = median_runtime, color = as.factor(N))) +
+  ggplot(aes(x = delay, y = median_runtime, color = as.factor(threads))) +
   geom_line() +
   geom_point(shape=1) +
   theme_light() +
   theme(strip.background = element_rect(color="black"), strip.text = element_text(size = 13, color = "black", angle = 0, hjust = 0.5), axis.ticks = element_line(size = 0.5, color = "black")) + 
   scale_color_discrete(name = "# Threads", labels = c("Streaming", "2", "3", "4", "8")) +
   labs(x = "Network RTT (milliseconds)", 
-       y = "Execution Time (seconds)") +
+       y = "Median Execution Time (seconds)") +
   scale_y_continuous(limits = c(0, 50), breaks = seq(0, 50, 10))
 
 strips <- strip_themed(
@@ -202,6 +214,8 @@ strips <- strip_themed(
 )
 pl <- pl + facet_wrap2(~ MiB +  numfiles, strip=strips)
 ggsave(file="five_gib.png", plot=pl, width=8, height=6)
+
+pl
 
 ```
 
