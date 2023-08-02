@@ -68,6 +68,8 @@ def main():
     num_files         = [1, 15] #[1] only 1 file for 1000, 5000 MiB
     delay_array       = ['0', '50', '100']
     num_threads_array =  ['1', '2', '3', '4', '8']
+    
+    #Included 3 fpt for test, but not used for graphing as largely redundant
     files_per_task_array = ['1', '3'] #['1'], no need to run 3 fpt with only 1 file for 1000, 5000 MiB
     runs_of_each      = 5
 
