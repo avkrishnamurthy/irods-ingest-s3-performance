@@ -64,8 +64,8 @@ def clear_bucket():
     return ['mc', 'rm', '-r', '--force', 'mymin/threadbucket/']
 
 def main():
-    filesize_array    = ['1', '5', '10', '100', '500'] #['1000', '5000']
-    num_files         = [1, 15] #[1] only 1 file for 1000, 5000 MiB
+    filesize_array    = ['1', '5', '10', '100', '500'] #['1024', '5120']
+    num_files         = [1, 15] #[1] only 1 file for 1024, 5120 MiB
     delay_array       = ['0', '50', '100']
     num_threads_array =  ['1', '2', '3', '4', '8']
     
